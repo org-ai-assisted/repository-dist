@@ -1,9 +1,312 @@
+commit 51c073fc271fb88104a5baac380e9b4467bd191d
+Merge: eece4a9 ddb4985
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Aug 30 09:50:58 2026 -0400
+
+    Merge remote-tracking branch 'refs/remotes/ArrayBolt3/arraybolt3/trixie'
+
+commit eece4a96f99344f0d8056412e0e6c52796a459dc
+Merge: f8a2776 ea23218
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Aug 30 01:11:56 2026 -0400
+
+    Merge remote-tracking branch 'refs/remotes/org-ai-assisted/ai'
+
+commit ddb49857f6d42611595e07e225c09654d893966f
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Fri Aug 28 15:28:47 2026 -0400
+
+    comments
+
+commit 33fb5813d84ea7211190c45dcf0adec2a2a3a227
+Merge: 3fe7a23 ea23218
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Fri Aug 28 15:19:18 2026 -0400
+
+    Merge branch 'ai' into arraybolt3/trixie
+
+commit ea23218e7b5d8e03c79f0a62fdaba4f37f2b8fc5
+Author: assisted-by-ai (Bot Account) (Machine Account) <228987186+assisted-by-ai@users.noreply.github.com>
+Date:   Mon Aug 24 23:31:09 2026 -0400
+
+    ci: drop orphaned consumer-secrets-audit.yml (reusable decommissioned)
+
+commit f8a2776904423402207534f275fbf1865e8aa69b
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Aug 25 03:26:56 2026 +0000
+
+    bumped changelog version
+
+commit 399e5b5425af26dc4c7feaf812d6e623152875aa
+Merge: 2617a58 19df475
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Aug 24 02:19:56 2026 -0400
+
+    Merge remote-tracking branch 'refs/remotes/org-ai-assisted/ai'
+
+commit 2617a58420a67a3d04b38eddbe6749ab9dd76577
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Aug 16 08:22:59 2026 +0000
+
+    bumped changelog version
+
+commit 8039e629fea4dc08d9e0e107d7d5bfe8df848d51
+Merge: ae8d3ea c578702
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Aug 15 12:50:57 2026 -0400
+
+    Merge remote-tracking branch 'org-ai-assisted/master'
+
+commit ae8d3eae904bdc69bd45f20c39ddd7932c6a659e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Aug 15 16:37:44 2026 +0000
+
+    bumped changelog version
+
+commit 80386edbfe16be6ff579b8470c94209197ae9300
+Merge: 01f8bde 3fe7a23
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Aug 10 09:33:04 2026 -0400
+
+    Merge remote-tracking branch 'refs/remotes/ArrayBolt3/arraybolt3/trixie'
+
+commit 19df4757f4efdb06d5780cf9f7e92292f00e3e91
+Author: claude (dev163 38f9745c-aed1-4fb4-b6ae-9899f20f8de2) <noreply@anthropic.com>
+Date:   Sat Aug 8 00:46:00 2026 -0400
+
+    ai-review-todo: all pending reviews completed
+
+    ai-review removes this file when nothing is left pending. The coderabbit
+    backlog drained, so the entries it tracked are done.
+
+commit d826fbb0f5054277ef8ea54426df0b7d3c803d9b
+Author: claude (dev163 38f9745c-aed1-4fb4-b6ae-9899f20f8de2) <noreply@anthropic.com>
+Date:   Fri Aug 7 14:53:07 2026 -0400
+
+    restore 'set -x' dropped by the strict-mode pass
+
+    The R-010 conversion replaced each script's existing preamble wholesale and did
+    not carry 'set -x' across. That is a silent loss of diagnostic output, and for
+    several of these it is the only output there is:
+
+    - build-time scripts (hardened-kernel build / download / ci_test, tirdad
+      build.sh, initializer-dist chroot-scripts-post.d): the trace IS the build log,
+      so a failing invocation and its expanded arguments become unavailable exactly
+      when they are needed.
+    - boot-time scripts (libvirt-dist, repository-dist-initializer).
+    - scripts whose only messages are 'true "INFO: ..."' lines, which produce
+      nothing on their own -- removing xtrace silences them completely.
+    - test harnesses (tb-updater unit_test, sdwdate-gui fuzzer), where the trace is
+      the point.
+
+    It was also inconsistent: initializer-dist's 80_cleanup kept it while its four
+    siblings in the same directory lost it.
+
+    Nothing asked for this and no commit described it as intentional, so it is
+    restored everywhere it was active.
+
+    Found by codex on initializer-dist. The other 19 files came from auditing the
+    whole pass for the same pattern.
+
+    Testing
+    -------
+
+    Gate exit 0 in an ISOLATED checkout, all eleven packages.
+
+    Audit: ~/strict-pass-tests/audit-stripped-setx.sh, which compares every file
+    changed on an 'ai' branch against org-ai-assisted/master and reports any that
+    had 'set -x' and no longer do.
+
+      before:  examined 43 package(s) on branch ai, 342 changed file(s); 23 stripped
+      after:   examined 43 package(s) on branch ai, 342 changed file(s);  0 stripped
+
+    The audit prints its own coverage, and fails outright if it examines zero
+    packages. Its first version tested '[ -d "$pkg/.git" ]', which is false for a
+    submodule -- .git is a FILE there -- so it skipped all 43 and reported nothing
+    stripped. A count that can be read is the difference between "clean" and "never
+    looked".
+
+commit 99ee9359dca5b7025440c582aa46d105cc9cdbe3
+Author: claude (dev163 38f9745c-aed1-4fb4-b6ae-9899f20f8de2) <noreply@anthropic.com>
+Date:   Fri Aug 7 12:55:36 2026 -0400
+
+    repository-dist: disable globbing on the deliberate split, and forward arguments
+
+    Two findings from an ai-review pass, both pre-existing rather than introduced
+    here.
+
+    1. THE DELIBERATE WORD SPLIT ALSO GLOBBED
+    ------------------------------------------
+
+      repository-dist ${repository_dist_arguments}
+
+    is unquoted ON PURPOSE -- the options file holds a string that must reach
+    repository-dist as separate arguments. But an unquoted expansion is subject to
+    PATHNAME EXPANSION as well as splitting, so a glob character in that file is
+    replaced by matching filenames from the current directory. Measured, with two
+    files named '--exclude=alpha' and '--exclude=beta' present:
+
+      opts='--exclude=*'
+      without noglob:  args=2: [--exclude=alpha] [--exclude=beta]
+      with noglob:     args=1: [--exclude=*]
+
+    Now wrapped in 'set -o noglob' / 'set +o noglob'. Splitting is wanted here;
+    globbing never is.
+
+    The review's own example was WRONG on this point -- it claimed '--ignore=*'
+    would expand to a file named 'foo'. A glob only matches names beginning with
+    '--ignore='; with 'foo' present nothing expands. The underlying property is
+    real, which is why the fix stands, but it took a correctly-named fixture to
+    show it.
+
+    Also noted in a comment, NOT fixed: the mechanism cannot express an option
+    whose value contains a space, because word splitting does not honour quotes in
+    the file. That is inherent to the design, not a defect to patch here.
+
+    2. THE WIZARD WRAPPER DROPPED EVERY ARGUMENT
+    ---------------------------------------------
+
+    usr/libexec/repository-dist/repository-dist-wizard called
+    /usr/bin/repository-dist-wizard with no '"$@"', so
+    'repository-dist-wizard --help' reached the real program with nothing at all.
+    Pre-existing; master is identical.
+
+    Testing
+    -------
+
+    Gate exit 0 in an ISOLATED checkout.
+
+      10 same, 0 differing
+
+    Forwarding is asserted directly rather than compared, because 'compare' runs
+    both variants and they agreed only because BOTH used to drop the arguments.
+    Canary: reverting the '"$@"' gives 'FAIL: wizard wrapper DROPPED its
+    arguments; got: RAN wizard' with an empty argument list.
+
+    The glob case in the harness is honestly WEAK: pathname expansion depends on
+    the working directory the script runs in, which the harness does not control,
+    so that case passes on both sides. The property is verified by the direct
+    measurement above instead.
+
+commit 98e2654bf5d5bcc8a175a27a3db8d2bdf04aaf70
+Merge: dc5261d c578702
+Author: claude (dev163 38f9745c-aed1-4fb4-b6ae-9899f20f8de2) <noreply@anthropic.com>
+Date:   Fri Aug 7 12:32:29 2026 -0400
+
+    Merge org-ai-assisted/master into ai
+
+    The branch was created from a stale local master, so its PR diff showed
+    master's newer commits -- including a changelog version bump -- as REMOVALS.
+    Merging rather than rebasing, per the no-history-rewrites rule.
+
+commit dc5261d2c3f648ea68af500e17eb8eab10c3fd7d
+Author: claude (dev163 38f9745c-aed1-4fb4-b6ae-9899f20f8de2) <noreply@anthropic.com>
+Date:   Fri Aug 7 11:05:25 2026 -0400
+
+    repository-dist: R-010 strict mode for the 3 standalone scripts
+
+    Files: usr/libexec/repository-dist/{pkexec-test,repository-dist-initializer,
+    repository-dist-wizard}.
+
+    No nounset traps: the initializer guards both of its inputs before reading
+    them, and the other two are three and six lines. The change is the preamble,
+    'set -x' removal, 'cat --' / 'touch --', and one waiver that matters.
+
+    The SC2086 waiver is the point
+    -------------------------------
+
+      repository-dist ${repository_dist_arguments}
+
+    is deliberately UNQUOTED. The file holds an option STRING -- for example
+    '--repository stable --codename bookworm' -- and splitting it into separate
+    arguments is the whole mechanism. Quoting it, which is what a blanket SC2086
+    sweep does, would hand repository-dist ONE argument containing spaces and
+    silently misconfigure the APT repository.
+
+    pkexec-test is three lines that do nothing on purpose: pkexec is pointed at it
+    to check that a policykit prompt appears and succeeds. It gained a comment
+    saying so, since a file whose entire body is 'exit 0' invites deletion.
+
+    Testing
+    -------
+
+    Gate exit 0 in an ISOLATED checkout.
+
+    New harness at ~/strict-pass-tests/rd-test/. repository-dist is stubbed and its
+    state directory is a fake root, so no APT configuration is touched. Eight
+    cases: the opts file missing, unreadable, empty and multi-word; the done-marker
+    already present; single-word opts; plus the wizard wrapper and pkexec-test.
+
+    The stub records each argument on its own line AND the ARGUMENT COUNT, because
+    that count is the only thing that can show whether the options string was split
+    or passed whole -- stdout and the exit code are identical either way.
+
+      8 same, 0 differing
+
+    Canary: quoting the expansion, exactly as a blanket SC2086 fix would, gives
+    6 same, 2 differing -- 'ARGC 4' becomes 'ARGC 1' at an unchanged exit code of 0.
+    That is the misconfiguration this waiver prevents, and without the argument
+    count the harness would have called it a pass.
+
+commit 3fe7a23642a1f0b23b07ba4fdd8acc7da947e316
+Merge: c849f00 01f8bde
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Fri Aug 7 00:59:13 2026 -0400
+
+    Merge branch 'master' into arraybolt3/trixie
+
+commit c849f009f08781d8f23e14f4074788e098b406f8
+Merge: 88af83e 5252ede
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Fri Aug 7 00:55:19 2026 -0400
+
+    Merge branch 'ai' into arraybolt3/trixie
+
+commit c5787024b5b642be4b7d51945bf1fd6a1962ef47
+Merge: 01f8bde 5252ede
+Author: assisted-by-ai (Bot Account) (Machine Account) <228987186+assisted-by-ai@users.noreply.github.com>
+Date:   Sat Aug 1 05:00:48 2026 -0400
+
+    Merge pull request #3 from org-ai-assisted/ai
+
+    CI: add bandit, codeql-actions, secrets-audit scanner workflows
+
+commit 01f8bdef728f8bbae66752b0bff7bd5954a0b3b5
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Aug 1 08:41:13 2026 +0000
+
+    bumped changelog version
+
 commit 7d228e98703f16bf8c25824922fcd1d8bcb41147
 Merge: 88af83e b185f8a
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Aug 1 04:23:16 2026 -0400
 
     Merge remote-tracking branch 'refs/remotes/org-ai-assisted/master'
+
+commit 5252ede6c8f89e43e6504600df639e1e81e3bca5
+Author: claude (dev142 b93fb2c6-e15f-4d45-8566-f3ded893b70e) <noreply@anthropic.com>
+Date:   Fri Jul 31 16:23:29 2026 -0400
+
+    CI: propagate bandit, codeql-actions, secrets-audit workflows
+
+    Byte-identical propagation from developer-meta-files
+    consumer-templates. Closes scanner-coverage gaps:
+
+    - consumer-bandit.yml: Python security lint, universal
+      self-discovery (extension + shebang scan), no per-repo config.
+    - consumer-codeql-actions.yml: CodeQL 'actions' language --
+      workflow-YAML security analysis (script-injection, missing
+      permissions, unpinned actions).
+    - consumer-secrets-audit.yml: manual-dispatch secrets surface
+      audit (presence flags only, values never emitted).
+
+    Managed files -- do not hand-edit; regenerated on the next
+    propagation pass.
+
+    ## AI-Assisted
+
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
 
 commit b185f8a7b32062cc35959cc1dd98a470e2d7bc06
 Merge: 88af83e 2dd2baa

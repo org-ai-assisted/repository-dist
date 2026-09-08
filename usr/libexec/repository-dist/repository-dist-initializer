@@ -22,17 +22,6 @@ fi
 
 repository_dist_arguments="$(cat -- /var/lib/repository-dist/derivative_apt_repository_opts)"
 
-## Deliberate word splitting: the file holds an option STRING, and the whole
-## point is that it reaches repository-dist as separate arguments.
-##
-## 'set -o noglob' first, because an unquoted expansion is subject to PATHNAME
-## EXPANSION as well as splitting -- a '*' or '?' in the options file would be
-## replaced by matching filenames from the current directory. Splitting is
-## wanted here; globbing never is.
-##
-## Note the inherent limit of this mechanism, which is not a defect to fix
-## here: the file cannot express an option whose VALUE contains a space, since
-## quotes in it are not honoured by word splitting.
 set -o noglob
 # shellcheck disable=SC2086
 repository-dist ${repository_dist_arguments}

@@ -1,3 +1,27 @@
+repository-dist (3:14.1-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@whonix.org>  Sun, 06 Sep 2026 16:47:13 +0000
+
+repository-dist (3:14.0-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@whonix.org>  Tue, 25 Aug 2026 03:26:56 +0000
+
+repository-dist (3:13.9-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@whonix.org>  Sun, 16 Aug 2026 08:22:59 +0000
+
+repository-dist (3:13.8-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@whonix.org>  Sat, 15 Aug 2026 16:37:44 +0000
+
 repository-dist (3:13.7-1) unstable; urgency=medium
 
   * New upstream version (local package).

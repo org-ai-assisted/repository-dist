@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Copyright (C) 2024 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## Copyright (C) 2024 - 2026 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
 
 ## Does nothing on purpose: pkexec is pointed at this to check that a policykit

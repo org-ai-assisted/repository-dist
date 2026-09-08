@@ -10,6 +10,4 @@ set -o errtrace
 shopt -s inherit_errexit
 shopt -s shift_verbose
 
-## '"$@"': without it the wrapper silently DROPS every argument, so
-## 'repository-dist-wizard --help' reached the real program with nothing.
 /usr/bin/repository-dist-wizard "$@"
