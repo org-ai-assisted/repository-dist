@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -su
+#!/usr/bin/python3 -Bsu
 
 ## Copyright (C) 2014 troubadour <trobador@riseup.net>
 ## Copyright (C) 2014 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
@@ -30,6 +30,7 @@ import yaml
 
 from guimessages.translations import _translations
 from guimessages.guimessage import gui_message
+from guimessages.check_display import exit_if_no_gui
 
 if os.path.exists('/usr/share/whonix/marker'):
     project = "Whonix"
@@ -270,6 +271,10 @@ def check_signals():
     return
 
 def main():
+    ## Constructing a QApplication on a machine with no display SIGABRTs
+    ## (exit 134, an uncatchable C++ qFatal). Guard with a clean exit (0)
+    ## instead by detecting the missing GUI before QApplication.
+    exit_if_no_gui()
     app = QApplication(sys.argv)
 
     signal.signal(signal.SIGINT, signal_handler)
