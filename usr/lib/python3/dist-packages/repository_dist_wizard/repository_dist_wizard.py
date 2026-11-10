@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -su
+#!/usr/bin/python3 -Bsu
 
 ## Copyright (C) 2014 troubadour <trobador@riseup.net>
 ## Copyright (C) 2014 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
@@ -29,7 +29,7 @@ import inspect
 import yaml
 
 from guimessages.translations import _translations
-from guimessages.guimessage import gui_message
+from guimessages.check_display import exit_if_no_gui
 
 if os.path.exists('/usr/share/whonix/marker'):
     project = "Whonix"
@@ -142,6 +142,8 @@ class RepositoryDistWizard(QWizard):
             message = self._('finish_failed')
             self.finish_text_failed = message
         except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+            ## Malformed/missing translations file: keep the hardcoded English
+            ## widget text set below instead of aborting the wizard.
             pass
 
         self.repo_group.setTitle("Repository")
@@ -187,6 +189,8 @@ class RepositoryDistWizard(QWizard):
                     self.one_shot = False
 
                 return self.currentId() + 2
+
+            return None
 
         elif self.currentId() == 2:
             if self.repo1.isChecked():
@@ -270,6 +274,11 @@ def check_signals():
     return
 
 def main():
+    ## Constructing a QApplication on a machine with no display SIGABRTs
+    ## (exit 134, an uncatchable C++ qFatal). Guard with a clean exit (0)
+    ## instead by detecting the missing GUI before QApplication.
+    exit_if_no_gui()
+    ## Keep a reference: QApplication must outlive the event loop (wizard.exec_()).
     app = QApplication(sys.argv)
 
     signal.signal(signal.SIGINT, signal_handler)
