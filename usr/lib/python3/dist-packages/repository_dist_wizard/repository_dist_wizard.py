@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -su
+#!/usr/bin/python3 -Bsu
 
 ## Copyright (C) 2014 troubadour <trobador@riseup.net>
 ## Copyright (C) 2014 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
@@ -29,7 +29,7 @@ import inspect
 import yaml
 
 from guimessages.translations import _translations
-from guimessages.guimessage import gui_message
+from guimessages.check_display import exit_if_no_gui
 
 if os.path.exists('/usr/share/whonix/marker'):
     project = "Whonix"
@@ -142,6 +142,12 @@ class RepositoryDistWizard(QWizard):
             message = self._('finish_failed')
             self.finish_text_failed = message
         except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+            ## Translations are missing or broken, try to limp along
+            ## regardless.
+            ##
+            ## TODO: We should set the text to *something* if these are broken,
+            ## as it is the user will be shown a lot of empty space where text
+            ## belongs.
             pass
 
         self.repo_group.setTitle("Repository")
@@ -187,6 +193,9 @@ class RepositoryDistWizard(QWizard):
                     self.one_shot = False
 
                 return self.currentId() + 2
+
+            ## Should be unreachable.
+            assert(False)
 
         elif self.currentId() == 2:
             if self.repo1.isChecked():
@@ -270,6 +279,7 @@ def check_signals():
     return
 
 def main():
+    exit_if_no_gui()
     app = QApplication(sys.argv)
 
     signal.signal(signal.SIGINT, signal_handler)
