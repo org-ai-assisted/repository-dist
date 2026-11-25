@@ -142,8 +142,12 @@ class RepositoryDistWizard(QWizard):
             message = self._('finish_failed')
             self.finish_text_failed = message
         except (yaml.scanner.ScannerError, yaml.parser.ParserError):
-            ## Malformed/missing translations file: keep the hardcoded English
-            ## widget text set below instead of aborting the wizard.
+            ## Translations are missing or broken, try to limp along
+            ## regardless.
+            ##
+            ## TODO: We should set the text to *something* if these are broken,
+            ## as it is the user will be shown a lot of empty space where text
+            ## belongs.
             pass
 
         self.repo_group.setTitle("Repository")
@@ -190,7 +194,8 @@ class RepositoryDistWizard(QWizard):
 
                 return self.currentId() + 2
 
-            return None
+            ## Should be unreachable.
+            assert(False)
 
         elif self.currentId() == 2:
             if self.repo1.isChecked():
@@ -274,11 +279,7 @@ def check_signals():
     return
 
 def main():
-    ## Constructing a QApplication on a machine with no display SIGABRTs
-    ## (exit 134, an uncatchable C++ qFatal). Guard with a clean exit (0)
-    ## instead by detecting the missing GUI before QApplication.
     exit_if_no_gui()
-    ## Keep a reference: QApplication must outlive the event loop (wizard.exec_()).
     app = QApplication(sys.argv)
 
     signal.signal(signal.SIGINT, signal_handler)
